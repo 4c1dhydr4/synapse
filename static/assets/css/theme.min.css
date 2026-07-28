@@ -24723,7 +24723,6 @@ https://prismjs.com/download.html?themes#themes=prism-okaidia&languages=markup+c
  * Loosely based on Monokai textmate theme by http://www.monokai.nl/
  * @author ocodia
  */
-/* @import 'prismjs/themes/prism-okaidia.css'; */
 code[class*=language-],
 pre[class*=language-] {
   color: #f8f8f2;
