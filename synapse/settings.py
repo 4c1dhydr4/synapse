@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+from django.utils.csp import CSP
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -208,11 +209,11 @@ STATIC_ROOT = BASE_DIR/'s3'
 
 # Storage
 STORAGES = {
-	"default": {
-		"BACKEND": 'synapse.storage.MediaStorage' ,
+	'default': {
+		'BACKEND': 'synapse.storage.PrivateMediaStorage',
 	},
-	"staticfiles": {
-		"BACKEND": 'whitenoise.storage.CompressedStaticFilesStorage',
+	'staticfiles': {
+		'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
 	},
 }
 
@@ -224,15 +225,20 @@ MEDIA_ROOT = BASE_DIR/'media'
 ERRORS_PATH = config('ERRORS_PATH')
 
 #AWS
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME")
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_QUERYSTRING_AUTH = True
+AWS_QUERYSTRING_EXPIRE = 3600
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
 AWS_S3_OBJECT_PARAMETERS = {
 	'CacheControl': 'max-age=86400',
 }
-AWS_LOCATION = 'media'
-AWS_DEFAULT_ACL = config('AWS_DEFAULT_ACL')
+AWS_S3_CUSTOM_DOMAIN = None
 
 # Email Backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -250,18 +256,16 @@ EMAIL_USE_LOCALTIME = config('EMAIL_USE_LOCALTIME', cast=bool)
 # Security
 
 # Content Security Policy
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://use.fontawesome.com", "https://apis.google.com")
-CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com","https://use.fontawesome.com", "https://apis.google.com")
-CSP_IMG_SRC = ("'self'", "data:","https://synapse-v2.s3.amazonaws.com", "http://www.google-analytics.com/",
-	"https://synapse.pe", "maps.gstatic.com", "*.googleapis.com", "*.youtube.com", "*.ytimg.com", "*.ggpht")
-CSP_SCRIPT_SRC = ("'self'", "https://maps.googleapis.com", "https://apis.google.com")
-CSP_SCRIPT_SRC_ELEM = ("'self'", "https://maps.googleapis.com", "https://apis.google.com", "https://maps.google.com", "http://www.google-analytics.com/ga.js",
-	"https://www.googletagmanager.com",)
-CSP_CONNECT_SRC = ("'self'","https://maps.googleapis.com", "https://www.google-analytics.com/")
-CSP_FRAME_SRC = ("'self'", "https://accounts.google.com", "https://synapse-v2.s3.amazonaws.com/", "https://www.youtube.com/", "https://td.doubleclick.net/")
-CSP_OBJECT_SRC = ("'self'",)
-CSP_INCLUDE_NONCE_IN = ("script-src","font-src", "script-src-elem", 'frame-src')
+SECURE_CSP = {
+	'default-src': [CSP.SELF, CSP.NONCE],
+	'style-src': [CSP.SELF, CSP.UNSAFE_INLINE],
+	'style-src-elem': [CSP.SELF, 'https://fonts.googleapis.com', CSP.UNSAFE_INLINE],
+	'font-src': [CSP.SELF, 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', CSP.NONCE],
+	'script-src': [CSP.SELF, CSP.NONCE],
+	'img-src': [CSP.SELF, "https:", 'data:', 'blob:', CSP.NONCE],
+	'media-src': [CSP.SELF, "https://synapse.s3.us-east-2.amazonaws.com", CSP.NONCE],
+	'frame-src': [CSP.SELF, '*.google.com', CSP.NONCE]
+}
 
 # Permission Policy
 PERMISSIONS_POLICY = {
