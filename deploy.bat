@@ -1,5 +1,5 @@
 @echo off
-set COMMIT_MESSAGE=Synapse v0.0.1: Project Init
+set COMMIT_MESSAGE=Synapse v0.0.2: Landing page init * website app init * Synapse logos update
 
 echo Deploying: %COMMIT_MESSAGE%
 echo Collecting static files

@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 # from apps.security.views import (CustomLoginView, SignUp, SocialAuth, success_auth,)
 
 urls = [
-    path('', include('apps.core.urls', namespace='core')),
+    path('', include('apps.website.urls', namespace='website')),
+    path('app/', include('apps.core.urls', namespace='core')),
     path('synapse-admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
