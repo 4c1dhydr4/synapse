@@ -1,5 +1,5 @@
 @echo off
-set COMMIT_MESSAGE=Synapse v0.0.2: Landing page init * website app init * Synapse logos update
+set COMMIT_MESSAGE=Synapse v0.0.3: CompressedStaticFilesStorage
 
 echo Deploying: %COMMIT_MESSAGE%
 echo Collecting static files
@@ -14,4 +14,5 @@ git add .
 git commit -m "%COMMIT_MESSAGE%
 git push
 
-echo No server. Finished
+echo Connecting Server
+ssh root@178.128.4.226

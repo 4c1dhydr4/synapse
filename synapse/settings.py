@@ -213,7 +213,7 @@ STORAGES = {
 		'BACKEND': 'synapse.storage.PrivateMediaStorage',
 	},
 	'staticfiles': {
-		'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+		'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
 	},
 }
 
