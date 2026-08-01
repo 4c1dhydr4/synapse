@@ -1,5 +1,5 @@
 @echo off
-set COMMIT_MESSAGE=Synapse v0.0.4: Social Auth for Google * Login and Logout views * User Auth
+set COMMIT_MESSAGE=Synapse v0.0.5: LOGIN_URL update
 
 echo Deploying: %COMMIT_MESSAGE%
 echo Collecting static files

@@ -258,6 +258,7 @@ EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 EMAIL_USE_LOCALTIME = config('EMAIL_USE_LOCALTIME', cast=bool)
 
 
+LOGIN_URL = "/security/signin/" 
 LOGIN_REDIRECT_URL = "/app/"
 LOGOUT_REDIRECT_URL = "/"
 
