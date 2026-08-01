@@ -59,8 +59,10 @@ MIDDLEWARE = [
 	'django.middleware.common.CommonMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.auth.middleware.LoginRequiredMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.csp.ContentSecurityPolicyMiddleware',
 	'allauth.account.middleware.AccountMiddleware',
 ]
 
@@ -108,8 +110,10 @@ TEMPLATES = [
 			'context_processors': [
 				'django.template.context_processors.debug',
 				'django.template.context_processors.request',
+				'django.template.context_processors.csp',
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
+				'apps.core.context_processors.app_info'
 			],
 		},
 	},
@@ -195,6 +199,9 @@ AUTH_PASSWORD_VALIDATORS = [
 if not DEBUG:
 	ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
 
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_ADAPTER = "apps.security.accounts.SocialAccountAdapter"
+
 # Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'America/Lima'
@@ -251,17 +258,18 @@ EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 EMAIL_USE_LOCALTIME = config('EMAIL_USE_LOCALTIME', cast=bool)
 
 
-# LOGIN_REDIRECT_URL = reverse_lazy('success_auth')
+LOGIN_REDIRECT_URL = "/app/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Security
 
 # Content Security Policy
 SECURE_CSP = {
 	'default-src': [CSP.SELF, CSP.NONCE],
-	'style-src': [CSP.SELF, CSP.UNSAFE_INLINE],
-	'style-src-elem': [CSP.SELF, 'https://fonts.googleapis.com', CSP.UNSAFE_INLINE],
-	'font-src': [CSP.SELF, 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', CSP.NONCE],
-	'script-src': [CSP.SELF, CSP.NONCE],
+	'style-src': [CSP.SELF, CSP.UNSAFE_INLINE, 'https://unicons.iconscout.com'],
+	'style-src-elem': [CSP.SELF, 'https://fonts.googleapis.com', 'https://unicons.iconscout.com', CSP.UNSAFE_INLINE],
+	'font-src': [CSP.SELF, 'data:', 'https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://unicons.iconscout.com', CSP.NONCE],
+	'script-src': [CSP.SELF, CSP.NONCE, 'https://smtpjs.com',],
 	'img-src': [CSP.SELF, "https:", 'data:', 'blob:', CSP.NONCE],
 	'media-src': [CSP.SELF, "https://synapse.s3.us-east-2.amazonaws.com", CSP.NONCE],
 	'frame-src': [CSP.SELF, '*.google.com', CSP.NONCE]

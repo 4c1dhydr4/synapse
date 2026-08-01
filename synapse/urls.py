@@ -9,6 +9,7 @@ from django.conf.urls.static import static
 urls = [
     path('', include('apps.website.urls', namespace='website')),
     path('app/', include('apps.core.urls', namespace='core')),
+    path('security/', include('apps.security.urls', namespace='security')),
     path('synapse-admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
