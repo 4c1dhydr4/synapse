@@ -43,6 +43,8 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
 	'apps.core',
 	'apps.security',
+	'apps.website',
+	'apps.llms',
 )
 
 INSTALLED_APPS = ('daphne',) + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
